@@ -9,9 +9,9 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGenerateImage = async () => {
-    if (!prompt.trim()) {
-      alert("Please enter a prompt.");
-      return;
+  console.log("Generating Image");
+  console.log(process.env.NEXT_PUBLIC_GPT_API_KEY);
+};
     }
     setIsLoading(true);
 
