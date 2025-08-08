@@ -1,39 +1,33 @@
-import React, { useState } from "react";
 import ImageCard from "@/components/common/ImageCard";
-import { ImageProps } from "@/interfaces";
+import React, { useState } from "react";
 
 const Home: React.FC = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [generatedImages, setGeneratedImages] = useState<ImageProps[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleGenerateImage = async () => {
-  console.log("Generating Image");
-  console.log(process.env.NEXT_PUBLIC_GPT_API_KEY);
-};
-    }
     setIsLoading(true);
-
     try {
-      // Simulate an API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const resp = await fetch("/api/generate-image", {
+        method: "POST",
+        body: JSON.stringify({ prompt }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
 
-      // Simulate generating a fake image URL based on prompt (replace with real API call)
-      const fakeImageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(
-        prompt
-      )}`;
+      if (!resp.ok) {
+        setIsLoading(false);
+        alert("Failed to generate image");
+        return;
+      }
 
-      // Save generated image and prompt
-      setGeneratedImages((prev) => [
-        ...prev,
-        { imageUrl: fakeImageUrl, prompt },
-      ]);
-
-      setImageUrl(fakeImageUrl);
+      const data = await resp.json();
+      setImageUrl(data.message);
     } catch (error) {
-      console.error("Failed to generate image:", error);
-      alert("Failed to generate image.");
+      console.error("Error generating image:", error);
+      alert("Error generating image");
     } finally {
       setIsLoading(false);
     }
@@ -68,28 +62,12 @@ const Home: React.FC = () => {
           </button>
         </div>
 
-        {/* Display the latest generated image */}
         {imageUrl && (
           <ImageCard
-            action={(path) => setImageUrl(path)}
+            action={() => setImageUrl(imageUrl)}
             imageUrl={imageUrl}
             prompt={prompt}
           />
-        )}
-
-        {/* Optional: display a gallery of all generated images */}
-        {generatedImages.length > 1 && (
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {generatedImages.map(({ imageUrl, prompt }, index) => (
-              <ImageCard
-                key={index}
-                imageUrl={imageUrl}
-                prompt={prompt}
-                action={(path) => setImageUrl(path)}
-                width="sm"
-              />
-            ))}
-          </div>
         )}
       </div>
     </div>
