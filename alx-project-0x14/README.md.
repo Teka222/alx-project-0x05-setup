@@ -1,0 +1,25 @@
+# ALX Project 0x14
+
+## API Overview
+The MoviesDatabase API provides access to movie, TV, and celebrity data.  
+It includes details such as titles, genres, ratings, release dates, cast & crew, and more.  
+You can search for movies, retrieve trending lists, or get detailed information about specific titles or people.
+
+## Version
+v1 (as per API documentation)
+
+## Available Endpoints
+- **/titles** – Search for movies or TV shows by title.
+- **/titles/{id}** – Get details for a specific movie or TV show.
+- **/titles/random** – Retrieve a random movie or TV show.
+- **/actors/{id}** – Get details for a specific actor.
+- **/genres** – List all available genres.
+- **/trending** – Get trending movies or TV shows.
+
+## Request and Response Format
+**Request Example:**
+```http
+GET https://moviesdatabase.p.rapidapi.com/titles
+Headers:
+  X-RapidAPI-Key: YOUR_API_KEY
+  X-RapidAPI-Host: moviesdatabase.p.rapidapi.com
